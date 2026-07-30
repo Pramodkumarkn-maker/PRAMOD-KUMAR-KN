@@ -1,0 +1,68 @@
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+using namespace chrono;
+
+// Iterative Factorial
+unsigned long long iterativeFactorial(int n)
+{
+    unsigned long long fact = 1;
+
+    for (int i = 1; i <= n; i++)
+    {
+        fact *= i;
+    }
+
+    return fact;
+}
+
+// Recursive Factorial
+unsigned long long recursiveFactorial(int n)
+{
+    if (n == 0 || n == 1)
+        return 1;
+
+    return n * recursiveFactorial(n - 1);
+}
+
+int main()
+{
+    int n;
+
+    cout << "Enter a non-negative integer: ";
+    cin >> n;
+
+    if (n < 0)
+    {
+        cout << "Invalid Input!" << endl;
+        return 0;
+    }
+
+    unsigned long long result1, result2;
+
+    // Measure Iterative Time
+    auto start1 = high_resolution_clock::now();
+    result1 = iterativeFactorial(n);
+    auto stop1 = high_resolution_clock::now();
+
+    // Measure Recursive Time
+    auto start2 = high_resolution_clock::now();
+    result2 = recursiveFactorial(n);
+    auto stop2 = high_resolution_clock::now();
+
+    auto time1 = duration_cast<nanoseconds>(stop1 - start1);
+    auto time2 = duration_cast<nanoseconds>(stop2 - start2);
+
+    cout << "\n===== FACTORIAL COMPARISON =====" << endl;
+
+    cout << "\nIterative Method" << endl;
+    cout << "Result : " << result1 << endl;
+    cout << "Execution Time : " << time1.count() << " ns" << endl;
+
+    cout << "\nRecursive Method" << endl;
+    cout << "Result : " << result2 << endl;
+    cout << "Execution Time : " << time2.count() << " ns" << endl;
+
+    return 0;
+}
