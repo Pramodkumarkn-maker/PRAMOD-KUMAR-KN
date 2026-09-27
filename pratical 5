@@ -1,0 +1,85 @@
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n, W;
+
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    int weight[20], value[20];
+
+    cout << "Enter weights: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> weight[i];
+    }
+
+    cout << "Enter values: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> value[i];
+    }
+
+    cout << "Enter capacity: ";
+    cin >> W;
+
+    int dp[21][101] = {0};
+
+    // Fill DP table
+    for (int i = 1; i <= n; i++)
+    {
+        for (int w = 1; w <= W; w++)
+        {
+            dp[i][w] = dp[i - 1][w];
+
+            if (weight[i - 1] <= w)
+            {
+                int include = value[i - 1]
+                            + dp[i - 1][w - weight[i - 1]];
+
+                if (include > dp[i][w])
+                {
+                    dp[i][w] = include;
+                }
+            }
+        }
+    }
+
+    cout << "\nMaximum Profit = "
+         << dp[n][W] << endl;
+
+    // Find selected items
+    cout << "Selected Items: ";
+
+    int capacity = W;
+
+    for (int i = n; i >= 1; i--)
+    {
+        if (dp[i][capacity] > dp[i - 1][capacity])
+        {
+            cout << "Item " << i << " ";
+            capacity = capacity - weight[i - 1];
+        }
+    }
+
+    // Display selected weights
+    cout << "\nSelected Weights: ";
+
+    capacity = W;
+
+    for (int i = n; i >= 1; i--)
+    {
+        if (dp[i][capacity] > dp[i - 1][capacity])
+        {
+            cout << weight[i - 1] << " ";
+            capacity = capacity - weight[i - 1];
+        }
+    }
+
+    cout << endl;
+
+    return 0;
+}
